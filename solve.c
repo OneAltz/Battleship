@@ -1,6 +1,16 @@
 #include "solve.h"
-
-
+    struct ship {
+        char name[20];
+        int size;
+        int health;
+    };
+    struct ship ships[5] = {
+        {"Carrier", 5, 5},
+        {"Battleship", 4, 4},
+        {"Cruiser", 3, 3},
+        {"Submarine", 3, 3},
+        {"Destroyer", 2, 2}
+    };
 void welcome_screen()
 {
     puts("BBBBBBBBBB       AAAAAA     TTTTTTTTTTT TTTTTTTTTTT  LLLLL        EEEEEEEEEEE");
@@ -28,11 +38,19 @@ void welcome_screen()
 }
 void initialize_game_board()
 {
-    char arr1board[10][10] = {"-"};
-    for(int i = 1; i < 11; ++i){ arr1board[0][i] = i;}
-    for(int i = 0; i < 10; ++i){ arr1board[i + 1][0] = 'A' + i;}
-    arr1board[0][0] = "♡";
-    for(int i = 0; i < 11; ++i){for (int j = 0; j < 11; ++j){printf("%c", arr1board[j][i]);}}
+    char arr1board[10][10] = { 
+        {"♡", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
+        {"A", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"B", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"C", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"D", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"E", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"F", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"G", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"H", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"I", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
+        {"J", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"}};
+    for(int i = 0; i < 11; ++i){for (int j = 0; j < 11; ++j){printf("%c", arr1board[j][i]);} printf("\n");}
 }
 void select_who_starts_first()
 {

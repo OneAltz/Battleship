@@ -4,11 +4,12 @@
 #define SIZE 10
 #define MAX_SHIPS 5
 #define HIT_BONUS 100
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <math.h>
 #include <time.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
 
 //Micah Sandberg
 // Nov 10 8:06

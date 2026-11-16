@@ -1,0 +1,8 @@
+
+
+Monte Carlo Simulation Sources, and Ideas for artificial Intelligent
+
+https://labex.io/tutorials/c-use-monte-carlo-simulation-for-probability-in-c-435357
+https://towardsdatascience.com/coding-an-intelligent-battleship-agent-bf0064a4b319/
+https://www.geeksforgeeks.org/artificial-intelligence/play-battleships-game-with-ai/
+https://www.geeksforgeeks.org/machine-learning/monte-carlo-tree-search-mcts-in-machine-learning/

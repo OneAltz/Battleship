@@ -1,6 +1,9 @@
 #ifndef SOLVE_H
 #define SOLVE_H
 #define _CRT_SECURE_NO_WARNINGS 
+#define SIZE 10
+#define MAX_SHIPS 5
+#define HIT_BONUS 100
 #include <stdio.h> 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -18,17 +21,16 @@ void initialize_game_board();
 //lowkey Ptr Arith might be goat hear 
 void select_who_starts_first();
 // This funtion will ask for the Ships location and place them on the game board : No.4
-void manually_place_ships_on_board();
+void manually_place_ships_on_board(char board[10][10]);
 // This Funtion will randomly place the ships on the game board : No.5
 //lowkey AI type Beat
-void randomly_place_ships_on_board();
+void randomly_place_ships_on_board(char board[10][10]);
 // This Funtion will Check Hit or Miss and update the game board accordingly : No.6
-int check_shot();
+int check_shot(char board[10][10]);
 // This Funtion will Check if the player has won the game : No.7
-bool is_winner();
+bool is_winner(char board[10][10]);
 // This Funtion will update the game board with the players shot : No.8
-void update_board();
-// This Funtion will display the game board to the player : No.9
+void update_board(char board[10][10]);
 void display_game_board();
 //This Funtion will be the Current Main P1 P2 Move : No.10
 void output_current_move();

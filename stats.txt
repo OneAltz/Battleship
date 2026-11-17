@@ -1,0 +1,5 @@
+========== GAME STATS ==========
+Game 1: Hit/Miss: 17/22  Total Shots: 39  Accuracy: 43%  Finished: Yes
+================================
+Game 2: Hit/Miss: 8/31  Total Shots: 39  Accuracy: 20%  Finished: Yes
+================================

@@ -215,37 +215,17 @@ void output_stats(int *misses, int *hits, int *total_shots, int *Rec, bool *game
     fprintf(file, "================================\n");
     fclose(file);
 }
-
-int ai_move(char board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[MAX_SHIPS])
+int ai_move(char board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[MAX_SHIPS], int *shot_row, int *shot_col)
 {
-    int best_row = 0, best_col = 0;
-    monte_carlo_simulation(&best_row, &best_col);
-    // The basic simulation does not track previous shots. Find an available square if necessary.
-    if (attacked[best_row][best_col]) {
-        int available = 0;
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (!attacked[row][col]) {available++;}
-            }
-        }
-        if (available == 0) {return -1;}
-        int choice = rand() % available;
-        int found = 0;
-        for (int row = 0; row < SIZE && !found; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (!attacked[row][col]) {
-                    if (choice == 0) {best_row = row;best_col = col;found = 1;break;}
-                    choice--;
-                }
-            }
-        }
-    }
+    int best_row = -1, best_col = -1;
+    monte_carlo_simulation(game_board, attacked, ships, &best_row, &best_col);
+    if (best_row < 0 || best_col < 0) {return -1;}
+    *shot_row = best_row; *shot_col = best_col;
     printf("AI fires at %c%d\n", 'A' + best_row, best_col + 1);
     int result = check_shot(board, game_board, attacked, ships, best_row, best_col);
     ai_message(result);
     return result;
 }
-
 void ai_message(int result)
 {
     if (result == 1) {printf("AI hit a ship!\n");}

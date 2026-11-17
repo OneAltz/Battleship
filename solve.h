@@ -58,7 +58,7 @@ bool check_if_sunk_ship(struct ship ships[MAX_SHIPS], ShipType target);
 // This Funtion will save stats: No.12
 void output_stats(int *misses, int *hits, int *total_shots, int *Rec, bool *game_over);
 // This Funtion will make the AI move: No.13
-int ai_move(char board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[MAX_SHIPS]);
+int ai_move(char board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[MAX_SHIPS], int *shot_row, int *shot_col);
 // This Funtion will print the AI result: No.14
 void ai_message(int result);
 // This Funtion will clean up at the end of a game

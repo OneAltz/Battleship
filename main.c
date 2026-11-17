@@ -123,11 +123,11 @@ int main(void)
             printf("===========================================\n");
 
             // Save the complete turn-by-turn record, including each shot's result.
-            FILE *history_file = fopen("moves.txt", "w");
+            FILE *history_file = fopen("stats.txt", "w");
             if (history_file != NULL) {
                 for (int i = 0; i < move_count; i++) {fprintf(history_file, "%s\n", move_history[i]);}
                 fclose(history_file);
-                printf("\nAll %d moves saved to moves.txt\n", move_count);
+                printf("\nAll %d moves saved to stats.txt\n", move_count);
             }
             clean_up();
         }

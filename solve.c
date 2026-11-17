@@ -47,6 +47,7 @@ void initialize_game_board()
     {"I", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"},
     {"J", "~", "~", "~", "~", "~", "~", "~", "~", "~", "~"}
 };
+ShipType game_board[10][10] = {WATER};
 }
 void select_who_starts_first(void)
 {
@@ -66,7 +67,7 @@ void select_who_starts_first(void)
     printf("Player %d goes first!\n", current_player);
 }
 
-void manually_place_ships_on_board(char board[10][10])
+void manually_place_ships_on_board(char board[10][10], ShipType game_board[10][10])
 {
     int ship_sizes[5] = {5, 4, 3, 3, 2};
     char row_letter;
@@ -125,6 +126,7 @@ void manually_place_ships_on_board(char board[10][10])
 
                 // Store ship identity on the board
                 board[r][c] = ships[ship].type;
+                game_board[r][c] = ships[ship].type;
 
                 // Remember the ship's coordinates
                 ships[ship].positions[i].row = r;
@@ -133,7 +135,7 @@ void manually_place_ships_on_board(char board[10][10])
         }
     }
 }
-void randomly_place_ships_on_board(char board[10][10])
+void randomly_place_ships_on_board(char board[10][10], ShipType game_board[10][10])
 {
     int ship_sizes[5] = {5, 4, 3, 3, 2};
     char row_letter;
@@ -170,31 +172,31 @@ void randomly_place_ships_on_board(char board[10][10])
                 if (direction == 'H') c += i;
                 else r += i;
                 board[r][c] = ships[ship].type;
+                game_board[r][c] = ships[ship].type;
             }
 }
 }
-int check_shot(ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE],Ship ships[5], int row, int col)
+int check_shot(ShipType board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], Ship ships[5], int row, int col)
 {
     int misses = 0, hits = 0, total_shots = 0;
     if (row < 0 || row >= SIZE ||col < 0 || col >= SIZE) {return -1;}
     if (attacked[row][col]) {printf("Already attacked this square!\n");return -1;}
     attacked[row][col] = true;
     ShipType target = board[row][col];
-    if(target == '~') {printf("Miss!\n");return 0; misses++;}
-    if(board[row][col] == '1' || board[row][col] == '2' || board[row][col] == '3' || board[row][col] == '4' || board[row][col] == '5'){printf("Hit! You hit the %s!\n", ships[target - 1].name);hits++;}
-    ships[target - 1].health--;
-    printf("Hit! You hit the %s!\n", ships[target - 1].name);
+    if(target == WATER) {printf("Miss!\n");return 0; misses++;}
+    if(game_board[row][col] == CARRIER || game_board[row][col] == BATTLESHIP || game_board[row][col] == CRUISER || game_board[row][col] == SUBMARINE || game_board[row][col] == DESTROYER)
+    {printf("Hit! You hit the %s!\n", ships[target - 1].name);hits++; ships[target - 1].health--; board[row][col] = 'X'; game_board[row][col] = WATER;}
     if (ships[target - 1].health == 0) {printf("You sunk the %s!\n",ships[target - 1].name);}
     total_shots = misses + hits;
     return 1;
 }
-bool is_winner(char board[10][10])
+bool is_winner(char game_board[10][10])
 {
     for (int i = 0; i < 10; ++i)
     {
         for (int j = 0; j < 10; ++j)
         {
-            if (board[i][j] == '1' || board[i][j] == '2' || board[i][j] == '3' || board[i][j] == '4' || board[i][j] == '5') return false;
+            if (game_board[i][j] == CARRIER || game_board[i][j] == BATTLESHIP || game_board[i][j] == CRUISER || game_board[i][j] == SUBMARINE || game_board[i][j] == DESTROYER) return false;
         }
     }
     return true;
@@ -203,31 +205,34 @@ void display_game_board(char board[10][10])
 {
      for(int i = 0; i < 12; ++i){for (int j = 0; j < 11; ++j){printf("%c", board[j][i]);} printf("\n");}
 }
-bool check_if_sunk_ship(char board[10][10])
+/*
+bool check_if_sunk_ship(char game_board[10][10])
 {
     int sunk_carrier = 0, sunk_battleship = 0, sunk_cruiser = 0, sunk_submarine = 0, sunk_destroyer = 0;
      for (int i = 0; i < 10; ++i)
     {
         for (int j = 0; j < 10; ++j)
         {
-            if (board[i][j] == '1') sunk_carrier += 1;
-            if (board[i][j] == '2') sunk_battleship += 1;
-            if (board[i][j] == '3') sunk_cruiser += 1;
-            if (board[i][j] == '4') sunk_submarine += 1;
-            if (board[i][j] == '5') sunk_destroyer += 1;
+            if (game_board[i][j] == CARRIER) {sunk_carrier += 1; printf("Sunk Carrier: %d\n", sunk_carrier);}
+            if (game_board[i][j] == BATTLESHIP) {sunk_battleship += 1; printf("Sunk Battleship: %d\n", sunk_battleship);}
+            if (game_board[i][j] == CRUISER) {sunk_cruiser += 1; printf("Sunk Cruiser: %d\n", sunk_cruiser);}
+            if (game_board[i][j] == SUBMARINE) {sunk_submarine += 1; printf("Sunk Submarine: %d\n", sunk_submarine);}
+            if (game_board[i][j] == DESTROYER) {sunk_destroyer += 1; printf("Sunk Destroyer: %d\n", sunk_destroyer);}
+
         }
     }
 
 }
+*/
 void output_stats(int *misses, int *hits, int *total_shots, int *Rec, bool *game_over)
 {
     int accuracy = (*hits * 100) / *total_shots;
     FILE* file = fopen("stats.txt", "w");
-    if(*Rec == 0){fputs("========== GAME STATS ==========\n", file);}
+    if(*Rec == 0){fprintf(file, "========== GAME STATS ==========\n");}
     *Rec += 1;
-    fputs("", file);
-    if(*game_over == true){fputs("Hit/Miss: %d/%d  Total Shots: %d  Accuracy: %d%%\n", file, *hits, *misses, *total_shots, accuracy);}
-    if(*game_over == true){fputs("================================\n", file);}
+    fprintf(file, "Moves:");
+    if(*game_over == true){fprintf(file, "Hit/Miss: %d/%d  Total Shots: %d  Accuracy: %d%%\n", *hits, *misses, *total_shots, accuracy);}
+    if(*game_over == true){fprintf(file, "================================\n");}
     fclose(file);
 }
 void ai_move(char board[10][10])

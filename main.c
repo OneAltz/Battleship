@@ -118,6 +118,7 @@ int main(void)
                 output_stats(&computer_misses, &computer_hits, &computer_total_shots, &Rec, &game_over);
                 printf("Hits: %d  Misses: %d  Shots: %d\n", computer_hits, computer_misses, computer_total_shots);
             }
+            output_stats(&player_misses, &player_hits, &player_total_shots, &Rec, &game_over);
             printf("\n========== COMPLETE MOVE HISTORY ==========\n");
             for (int i = 0; i < move_count; i++) {printf("%s\n", move_history[i]);}
             printf("===========================================\n");

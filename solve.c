@@ -127,15 +127,23 @@ void manually_place_ships_on_board(char board[10][10])
             if (valid == 0) {printf("A ship is already there!\n");continue;}
 
             // Place ship
-            for (int i = 0; i < ship_sizes[ship]; ++i)
+            for (int i = 0; i < ships[ship].size; i++)
             {
                 int r = row;
                 int c = col;
-                if (direction == 'H') c += i;
-                else r += i;
-                board[r][c] = 'S';
-            }
-            printf("%s placed successfully!\n", ship_names[ship]);
+
+                if (direction == 'H')
+                c += i;
+                else
+                r += i;
+
+                // Store ship identity on the board
+                board[r][c] = ships[ship].type;
+
+                // Remember the ship's coordinates
+                ships[ship].positions[i].row = r;
+                ships[ship].positions[i].col = c;
+}
         }
     }
 }
@@ -173,7 +181,7 @@ void randomly_place_ships_on_board(char board[10][10])
                 else r += i;
                 if (board[r][c] != '~') {valid = 0; break;}
             }
-            if (valid == 0) {printf("A ship is already there!\n");continue;}
+            if (valid == 0) {continue;}
 
             // Place ship
             for (int i = 0; i < ship_sizes[ship]; ++i)
@@ -230,9 +238,14 @@ void output_stats()
 {
     
 }
-void ai_move()
+void ai_move(char board[10][10])
 {
-    
+    int best_row = 0, best_col = 0;
+    monte_carlo_simulation(&best_row, &best_col);
+    board[best_row][best_col] = 'X'; // Mark the hit on the board
+    printf("AI fires at %c%d\n", 'A' + best_row, best_col + 1);
+    if (board[best_row][best_col] == 'S'){ printf("AI hit a ship at %c%d!\n", 'A' + best_row, best_col + 1);} 
+    else {printf("AI missed!\n");}
 }
 void ai_message()
 {

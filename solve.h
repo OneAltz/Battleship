@@ -40,11 +40,33 @@ bool check_if_sunk_ship();
 //This Funtion will be the stats of the Games : No.12
 void output_stats();
 //This Funtion will be the AI moves for the game : No.13
-void ai_move();
+void ai_move(char board[10][10]);
 //This Funtion will be the AI messages for the game : No.14 
 void ai_message();
 //This Funtion Will be anything that needs to be cleaned up at the end of the game
 void clean_up();
 //This Funtion will Print the Game Rules for the game : No.15
 void print_game_rules();
+
+typedef enum {
+    WATER = 0,
+    CARRIER = 1,
+    BATTLESHIP = 2,
+    CRUISER = 3,
+    SUBMARINE = 4,
+    DESTROYER = 5
+} ShipType;
+
+typedef struct {
+    int row;
+    int col;
+} Coordinate;
+
+typedef struct {
+    ShipType type;
+    char name[20];
+    int size;
+    int health;
+    Coordinate positions[5];
+} Ship;
 #endif

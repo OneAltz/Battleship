@@ -13,7 +13,12 @@ int main(void)
     welcome_screen();
 
     // Run Monte Carlo simulation
-    monte_carlo_simulation();
+    int best_row = 0;
+    int best_col = 0;
+
+    monte_carlo_simulation(&best_row, &best_col);
+
+    printf("Best Shot: %c%d\n", 'A' + best_row, best_col + 1);
 
     return 0;
 }

@@ -169,21 +169,23 @@ void randomly_place_ships_on_board(char board[10][10])
                 int c = col;
                 if (direction == 'H') c += i;
                 else r += i;
-                board[r][c] = 'S';
+                board[r][c] = ships[ship].type;
             }
 }
 }
 int check_shot(ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE],Ship ships[5], int row, int col)
 {
-
+    int misses = 0, hits = 0, total_shots = 0;
     if (row < 0 || row >= SIZE ||col < 0 || col >= SIZE) {return -1;}
     if (attacked[row][col]) {printf("Already attacked this square!\n");return -1;}
     attacked[row][col] = true;
     ShipType target = board[row][col];
-    if (target == WATER) {printf("Miss!\n");return 0;}
-    ships[target].health--;
-    printf("Hit! You hit the %s!\n", ships[target].name);
-    if (ships[target].health == 0) {printf("You sunk the %s!\n",ships[target].name);}
+    if(target == '~') {printf("Miss!\n");return 0; misses++;}
+    if(board[row][col] == '1' || board[row][col] == '2' || board[row][col] == '3' || board[row][col] == '4' || board[row][col] == '5'){printf("Hit! You hit the %s!\n", ships[target - 1].name);hits++;}
+    ships[target - 1].health--;
+    printf("Hit! You hit the %s!\n", ships[target - 1].name);
+    if (ships[target - 1].health == 0) {printf("You sunk the %s!\n",ships[target - 1].name);}
+    total_shots = misses + hits;
     return 1;
 }
 bool is_winner(char board[10][10])
@@ -192,7 +194,7 @@ bool is_winner(char board[10][10])
     {
         for (int j = 0; j < 10; ++j)
         {
-            if (board[i][j] == 'S') return false;
+            if (board[i][j] == '1' || board[i][j] == '2' || board[i][j] == '3' || board[i][j] == '4' || board[i][j] == '5') return false;
         }
     }
     return true;
@@ -201,17 +203,32 @@ void display_game_board(char board[10][10])
 {
      for(int i = 0; i < 12; ++i){for (int j = 0; j < 11; ++j){printf("%c", board[j][i]);} printf("\n");}
 }
-void output_current_move()
+bool check_if_sunk_ship(char board[10][10])
 {
-    
+    int sunk_carrier = 0, sunk_battleship = 0, sunk_cruiser = 0, sunk_submarine = 0, sunk_destroyer = 0;
+     for (int i = 0; i < 10; ++i)
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            if (board[i][j] == '1') sunk_carrier += 1;
+            if (board[i][j] == '2') sunk_battleship += 1;
+            if (board[i][j] == '3') sunk_cruiser += 1;
+            if (board[i][j] == '4') sunk_submarine += 1;
+            if (board[i][j] == '5') sunk_destroyer += 1;
+        }
+    }
+
 }
-bool check_if_sunk_ship()
+void output_stats(int *misses, int *hits, int *total_shots, int *Rec, bool *game_over)
 {
-    
-}
-void output_stats()
-{
-    
+    int accuracy = (*hits * 100) / *total_shots;
+    FILE* file = fopen("stats.txt", "w");
+    if(*Rec == 0){fputs("========== GAME STATS ==========\n", file);}
+    *Rec += 1;
+    fputs("", file);
+    if(*game_over == true){fputs("Hit/Miss: %d/%d  Total Shots: %d  Accuracy: %d%%\n", file, *hits, *misses, *total_shots, accuracy);}
+    if(*game_over == true){fputs("================================\n", file);}
+    fclose(file);
 }
 void ai_move(char board[10][10])
 {
@@ -221,14 +238,6 @@ void ai_move(char board[10][10])
     printf("AI fires at %c%d\n", 'A' + best_row, best_col + 1);
     if (board[best_row][best_col] == 'S'){ printf("AI hit a ship at %c%d!\n", 'A' + best_row, best_col + 1);} 
     else {printf("AI missed!\n");}
-}
-void ai_message()
-{
-    
-}
-void clean_up()
-{
-    
 }
 void print_game_rules()
 {

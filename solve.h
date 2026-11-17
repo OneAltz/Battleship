@@ -27,18 +27,18 @@ void manually_place_ships_on_board(char board[10][10]);
 //lowkey AI type Beat
 void randomly_place_ships_on_board(char board[10][10]);
 // This Funtion will Check Hit or Miss and update the game board accordingly : No.6
-int check_shot(char board[10][10]);
+int check_shot(ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE],Ship ships[5], int row, int col);
 // This Funtion will Check if the player has won the game : No.7
 bool is_winner(char board[10][10]);
 // This Funtion will update the game board with the players shot : No.8
 void update_board(char board[10][10]);
-void display_game_board();
+void display_game_board(char board[10][10]);
 //This Funtion will be the Current Main P1 P2 Move : No.10
 void output_current_move();
 //This Funtion will be if the shit has "Health" : No.11
-bool check_if_sunk_ship();
+bool check_if_sunk_ship(char board[10][10]);
 //This Funtion will be the stats of the Games : No.12
-void output_stats();
+void output_stats(int *misses, int *hits, int *total_shots, int *Rec, bool *game_over);
 //This Funtion will be the AI moves for the game : No.13
 void ai_move(char board[10][10]);
 //This Funtion will be the AI messages for the game : No.14 
@@ -49,7 +49,6 @@ void clean_up();
 void print_game_rules();
 
 typedef enum {
-    WATER = 0,
     CARRIER = 1,
     BATTLESHIP = 2,
     CRUISER = 3,

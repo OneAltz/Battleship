@@ -1,11 +1,11 @@
 #include "solve.h"
 #include "MonteCarlo.h"
-ship ships[5] = {
-    {CARRIER,    "Carrier",    5, 5, {{0}}},
+Ship ships[5] = {
+    {CARRIER, "Carrier", 5, 5, {{0}}},
     {BATTLESHIP, "Battleship", 4, 4, {{0}}},
-    {CRUISER,    "Cruiser",    3, 3, {{0}}},
-    {SUBMARINE,  "Submarine",  3, 3, {{0}}},
-    {DESTROYER,  "Destroyer",  2, 2, {{0}}}
+    {CRUISER, "Cruiser", 3, 3, {{0}}},
+    {SUBMARINE, "Submarine", 3, 3, {{0}}},
+    {DESTROYER, "Destroyer", 2, 2, {{0}}}
 };
 void welcome_screen()
 {
@@ -136,13 +136,6 @@ void manually_place_ships_on_board(char board[10][10])
 void randomly_place_ships_on_board(char board[10][10])
 {
     int ship_sizes[5] = {5, 4, 3, 3, 2};
-    const char *ship_names[5] = {
-        "Carrier",
-        "Battleship",
-        "Cruiser",
-        "Submarine",
-        "Destroyer"
-    };
     char row_letter;
     char direction;
     int column;
@@ -180,7 +173,7 @@ void randomly_place_ships_on_board(char board[10][10])
             }
 }
 }
-int check_shot( ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE], ShipStatus ships[6], int row, int col)
+int check_shot(ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE],Ship ships[5], int row, int col)
 {
 
     if (row < 0 || row >= SIZE ||col < 0 || col >= SIZE) {return -1;}

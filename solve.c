@@ -1,17 +1,12 @@
 #include "solve.h"
 #include "MonteCarlo.h"
-    struct ship {
-        char name[20];
-        int size;
-        int health;
-    };
-    struct ship ships[5] = {
-        {"Carrier", 5, 5},
-        {"Battleship", 4, 4},
-        {"Cruiser", 3, 3},
-        {"Submarine", 3, 3},
-        {"Destroyer", 2, 2}
-    };
+ship ships[5] = {
+    {CARRIER,    "Carrier",    5, 5, {{0}}},
+    {BATTLESHIP, "Battleship", 4, 4, {{0}}},
+    {CRUISER,    "Cruiser",    3, 3, {{0}}},
+    {SUBMARINE,  "Submarine",  3, 3, {{0}}},
+    {DESTROYER,  "Destroyer",  2, 2, {{0}}}
+};
 void welcome_screen()
 {
     puts("BBBBBBBBBB       AAAAAA     TTTTTTTTTTT TTTTTTTTTTT  LLLLL        EEEEEEEEEEE");
@@ -74,15 +69,6 @@ void select_who_starts_first(void)
 void manually_place_ships_on_board(char board[10][10])
 {
     int ship_sizes[5] = {5, 4, 3, 3, 2};
-
-    const char *ship_names[5] = {
-        "Carrier",
-        "Battleship",
-        "Cruiser",
-        "Submarine",
-        "Destroyer"
-    };
-
     char row_letter;
     char direction;
     int column;
@@ -95,7 +81,7 @@ void manually_place_ships_on_board(char board[10][10])
         valid = 0;
         while (valid == 0)
         {
-            printf("\nPlace your %s (%d spaces)\n", ship_names[ship], ship_sizes[ship]);
+            printf("\nPlace your %s (%d spaces)\n", ships[ship].name, ship_sizes[ship]);
 
             printf("Enter row (A-J): ");
             if (scanf(" %c", &row_letter) != 1) return;
@@ -127,7 +113,7 @@ void manually_place_ships_on_board(char board[10][10])
             if (valid == 0) {printf("A ship is already there!\n");continue;}
 
             // Place ship
-            for (int i = 0; i < ships[ship].size; i++)
+            for (int i = 0; i < ship_sizes[ship]; i++)
             {
                 int r = row;
                 int c = col;
@@ -194,22 +180,18 @@ void randomly_place_ships_on_board(char board[10][10])
             }
 }
 }
-int check_shot(char board[10][10])
+int check_shot( ShipType board[SIZE][SIZE], bool attacked[SIZE][SIZE], ShipStatus ships[6], int row, int col)
 {
-    int row;
-    char column;
-    do{
-    printf("Enter row (0-9): ");
-    scanf("%d", &row);
-    printf("Enter column (A-J): ");
-    scanf(" %c", &column);
-    column = toupper((unsigned char)column);
-    int col = column - 'A';
-    if (row < 0 || row >= 10 || col < 0 || col >= 10){printf("Invalid coordinates. Try again.\n");return -1;}
-    if(board[row][col] == 'S'){board[row][col] = 'X';printf("Hit!\n");return 1;}
-    else{board[row][col] = 'O';printf("Miss!\n");return 0;}
-    }while (board[row][column - 'A'] == 'O');
 
+    if (row < 0 || row >= SIZE ||col < 0 || col >= SIZE) {return -1;}
+    if (attacked[row][col]) {printf("Already attacked this square!\n");return -1;}
+    attacked[row][col] = true;
+    ShipType target = board[row][col];
+    if (target == WATER) {printf("Miss!\n");return 0;}
+    ships[target].health--;
+    printf("Hit! You hit the %s!\n", ships[target].name);
+    if (ships[target].health == 0) {printf("You sunk the %s!\n",ships[target].name);}
+    return 1;
 }
 bool is_winner(char board[10][10])
 {

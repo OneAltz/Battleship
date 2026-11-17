@@ -11,8 +11,34 @@
 #include <string.h>
 #include <ctype.h>
 
+typedef enum {
+    WATER = 0,
+    CARRIER = 1,
+    BATTLESHIP = 2,
+    CRUISER = 3,
+    SUBMARINE = 4,
+    DESTROYER = 5
+} ShipType;
+
+typedef struct {
+    int row;
+    int col;
+} Coordinate;
+
+struct ship {
+    ShipType type;
+    char name[20];
+    int size;
+    int health;
+    Coordinate positions[5];
+};
 //Micah Sandberg
 // Nov 10 8:06
+// Nov 11 2:12-8:32
+// Nov 12 2:53-4:33
+// Nov 13 2:32-5:32
+// Nov 15 ~5:00
+// Nov 16 ~2:00
 
 // This Funtion will display the welcome screen for the program: No.1
 void welcome_screen();
@@ -27,7 +53,7 @@ void manually_place_ships_on_board(char board[10][10], ShipType game_board[10][1
 //lowkey AI type Beat
 void randomly_place_ships_on_board(char board[10][10], ShipType game_board[10][10]);
 // This Funtion will Check Hit or Miss and update the game board accordingly : No.6
-int check_shot(ShipType board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], Ship ships[5], int row, int col);
+int check_shot(ShipType board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[5], int row, int col);
 // This Funtion will Check if the player has won the game : No.7
 bool is_winner(char game_board[10][10]);
 // This Funtion will update the game board with the players shot : No.8
@@ -47,26 +73,4 @@ void ai_message();
 void clean_up();
 //This Funtion will Print the Game Rules for the game : No.15
 void print_game_rules();
-
-typedef enum {
-    WATER = 0,
-    CARRIER = 1,
-    BATTLESHIP = 2,
-    CRUISER = 3,
-    SUBMARINE = 4,
-    DESTROYER = 5
-} ShipType;
-
-typedef struct {
-    int row;
-    int col;
-} Coordinate;
-
-typedef struct {
-    ShipType type;
-    char name[20];
-    int size;
-    int health;
-    Coordinate positions[5];
-} Ship;
 #endif

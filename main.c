@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -6,19 +7,58 @@
 
 int main(void)
 {
-    // Seed the random number generator
-    srand((unsigned int)time(NULL));
-
-    // Display welcome screen
-    welcome_screen();
-
-    // Run Monte Carlo simulation
     int best_row = 0;
     int best_col = 0;
+    int player_decision = 0;
 
-    monte_carlo_simulation(&best_row, &best_col);
+    srand((unsigned int)time(NULL));
 
-    printf("Best Shot: %c%d\n", 'A' + best_row, best_col + 1);
+    while (player_decision != 3)
+    {
+        printf("\n===== BATTLESHIP =====\n");
+        printf("Enter 1 for the rules\n");
+        printf("Enter 2 for the game\n");
+        printf("Enter 3 to quit\n");
+        printf("Choice: ");
+
+        if (scanf("%d", &player_decision) != 1)
+        {
+            printf("Invalid input!\n");
+
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+            {
+            }
+
+            player_decision = 0;
+            continue;
+        }
+
+        if (player_decision == 1)
+        {
+            print_game_rules();
+        }
+        else if (player_decision == 2)
+        {
+            printf("\nStarting Monte Carlo simulation...\n");
+
+            best_row = 0;
+            best_col = 0;
+
+            monte_carlo_simulation(&best_row, &best_col);
+
+            printf("Best move: %c%d\n",
+                   'A' + best_row, best_col + 1);
+        }
+        else if (player_decision == 3)
+        {
+            printf("Thanks for playing!\n");
+        }
+        else
+        {
+            printf("Invalid choice. Try again.\n");
+        }
+    }
 
     return 0;
 }

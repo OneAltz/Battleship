@@ -1,11 +1,11 @@
 #include "solve.h"
 #include "MonteCarlo.h"
-Ship ships[5] = {
-    {CARRIER, "Carrier", 5, 5, {{0}}},
+struct ship ships[5] = {
+    {CARRIER,    "Carrier",    5, 5, {{0}}},
     {BATTLESHIP, "Battleship", 4, 4, {{0}}},
-    {CRUISER, "Cruiser", 3, 3, {{0}}},
-    {SUBMARINE, "Submarine", 3, 3, {{0}}},
-    {DESTROYER, "Destroyer", 2, 2, {{0}}}
+    {CRUISER,    "Cruiser",    3, 3, {{0}}},
+    {SUBMARINE,  "Submarine",  3, 3, {{0}}},
+    {DESTROYER,  "Destroyer",  2, 2, {{0}}}
 };
 void welcome_screen()
 {
@@ -125,7 +125,7 @@ void manually_place_ships_on_board(char board[10][10], ShipType game_board[10][1
                 r += i;
 
                 // Store ship identity on the board
-                board[r][c] = ships[ship].type;
+                board[r][c] = 's';
                 game_board[r][c] = ships[ship].type;
 
                 // Remember the ship's coordinates
@@ -176,14 +176,14 @@ void randomly_place_ships_on_board(char board[10][10], ShipType game_board[10][1
             }
 }
 }
-int check_shot(ShipType board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], Ship ships[5], int row, int col)
+int check_shot(ShipType board[SIZE][SIZE], ShipType game_board[SIZE][SIZE], bool attacked[SIZE][SIZE], struct ship ships[5], int row, int col)
 {
     int misses = 0, hits = 0, total_shots = 0;
     if (row < 0 || row >= SIZE ||col < 0 || col >= SIZE) {return -1;}
     if (attacked[row][col]) {printf("Already attacked this square!\n");return -1;}
     attacked[row][col] = true;
     ShipType target = board[row][col];
-    if(target == WATER) {printf("Miss!\n");return 0; misses++;}
+    if(target == WATER) {printf("Miss!\n");misses++;return 0;}
     if(game_board[row][col] == CARRIER || game_board[row][col] == BATTLESHIP || game_board[row][col] == CRUISER || game_board[row][col] == SUBMARINE || game_board[row][col] == DESTROYER)
     {printf("Hit! You hit the %s!\n", ships[target - 1].name);hits++; ships[target - 1].health--; board[row][col] = 'X'; game_board[row][col] = WATER;}
     if (ships[target - 1].health == 0) {printf("You sunk the %s!\n",ships[target - 1].name);}
@@ -201,9 +201,12 @@ bool is_winner(char game_board[10][10])
     }
     return true;
 }
-void display_game_board(char board[10][10])
+void display_game_board(ShipType board[10][10])
 {
-     for(int i = 0; i < 12; ++i){for (int j = 0; j < 11; ++j){printf("%c", board[j][i]);} printf("\n");}
+    printf("    ");
+    for (int col = 1; col <= 10; col++) {printf("%2d ", col);}
+    printf("\n");
+    for (int row = 0; row < 10; row++) {printf("%c   ", 'A' + row); for (int col = 0; col < 10; col++) {if (board[row][col] == WATER) {printf(" ~ ");}else {printf(" S ");}}printf("\n");}
 }
 /*
 bool check_if_sunk_ship(char game_board[10][10])
